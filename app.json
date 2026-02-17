@@ -9,7 +9,13 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSHealthShareUsageDescription": "FaithSteps needs access to your step count to track your journey progress.",
+        "NSHealthUpdateUsageDescription": "FaithSteps needs write access to update your health data.",
+        "NSMotionUsageDescription": "FaithSteps uses motion data to track your steps when the app is open."
+      },
+      "bundleIdentifier": "com.818labs.faithsteps"
     },
     "android": {
       "adaptiveIcon": {
@@ -37,6 +43,16 @@
           "dark": {
             "backgroundColor": "#000000"
           }
+        }
+      ],
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      "@react-native-google-signin/google-signin",
+      "expo-apple-authentication",
+      [
+        "react-native-health",
+        {
+          "isHealthConnectEnabled": true
         }
       ]
     ],

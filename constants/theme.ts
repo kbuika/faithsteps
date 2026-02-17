@@ -12,9 +12,12 @@ export const Palette = {
   midnightBlue: '#040d2aff',
   oceanTeal: '#086972',
   vibrantEmerald: '#17B978',
-  electricLime: '#A7FF83',
+  electricLime: '#CEFF1A', // More neon/Apple Fitness like
   
-  // Neutral Tints
+  // Apple Fitness Neutrals
+  zinc900: '#1C1C1E', // Standard iOS dark surface
+  zinc800: '#2C2C2E', // Slightly lighter surface
+  zinc700: '#3A3A3C', // Borders/Separators
   white: '#FFFFFF',
   offWhite: '#F5F5F7',
   charcoal: '#1C1C1E',
@@ -34,8 +37,8 @@ export const Palette = {
 export const Theme = {
   colors: {
     // Backgrounds
-    background: Palette.midnightBlue,       // Main screen background
-    surface: Palette.oceanTeal,             // Card background
+    background: Palette.black,              // Pure black for OLED/Premium feel
+    surface: Palette.zinc900,               // Dark grey cards
     surfaceHighlight: '#0A7A85',            // Lighter teal for pressed states or active cards
     
     // Text
@@ -49,8 +52,8 @@ export const Theme = {
     primary: Palette.vibrantEmerald,        // Primary buttons, active tabs
     primaryForeground: Palette.white,       // Text on primary buttons
     
-    secondary: Palette.oceanTeal,           // Secondary buttons, inactive tabs
-    secondaryForeground: Palette.electricLime, // Text on secondary buttons
+    secondary: Palette.zinc800,             // Dark grey buttons
+    secondaryForeground: Palette.electricLime, // Lime text on grey
 
     accent: Palette.electricLime,           // Floating Action Buttons, Highlights, Call-to-Actions
 
@@ -64,6 +67,9 @@ export const Theme = {
     border: 'rgba(8, 105, 114, 0.5)',       // Subtle teal border for cards
     borderFocus: Palette.electricLime,      // Focused input border
     divider: 'rgba(255, 255, 255, 0.1)',    // Subtle white divider
+    zinc900: Palette.zinc900,
+    zinc800: Palette.zinc800,
+    zinc700: Palette.zinc700,
   },
   
   gradients: {
