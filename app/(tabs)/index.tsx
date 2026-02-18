@@ -1,49 +1,53 @@
-import { GlassCard } from '@/components/ui/GlassCard';
-import { PremiumButton } from '@/components/ui/PremiumButton';
+import { JourneyMap } from '@/components/journey/JourneyMap';
+import { MilestonePreview } from '@/components/journey/MilestonePreview';
+import { StepGoalCard } from '@/components/journey/StepGoalCard';
 import { Theme } from '@/constants/theme';
 import { useOnboardingStore } from '@/store/onboardingStore';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react'; // Removed LinearGradient import
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
-  const router = useRouter();
-  const goal = useOnboardingStore((state) => state.dailyStepGoal);
-  const journeyId = useOnboardingStore((state) => state.selectedJourneyId);
-  const reset = useOnboardingStore((state) => state.reset);
-  const completeOnboarding = useOnboardingStore((state) => state.completeOnboarding);
-
-  const handleRestart = async () => {
-    // 1. Reset store state
-    reset(); 
-    // 2. Force completion state to false just in case
-    useOnboardingStore.setState({ isOnboardingComplete: false });
-    // 3. Navigate back to onboarding root
-    router.replace('/onboarding');
-  };
+  const goal = useOnboardingStore((state) => state.dailyStepGoal) || 7000;
+  const currentSteps = 3450; // Mock current steps for now
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={Theme.gradients.background}
-        style={StyleSheet.absoluteFill}
-      />
+      {/* Removed LinearGradient to match onboarding solid black theme */}
       
-      <View style={styles.content}>
-        <GlassCard>
-            <Text style={styles.welcome}>Welcome Pilgrim!</Text>
-            <Text style={styles.meta}>Goal: {goal.toLocaleString()} steps</Text>
-            <Text style={styles.meta}>Journey: {journeyId || 'The Exodus'}</Text>
-
-            <View style={{ marginTop: 24 }}>
-                <PremiumButton 
-                    title="Restart Onboarding" 
-                    onPress={handleRestart}
-                    variant="outline"
-                />
+      {/* Scrollable Content */}
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+        
+        {/* Header */}
+        <View style={styles.header}>
+            <View>
+                <Text style={styles.journeyName}>The Exodus</Text>
+                <View style={styles.streakContainer}>
+                    <Text>🔥</Text>
+                    <Text style={styles.streakText}> 12 Day Streak</Text>
+                </View>
             </View>
-        </GlassCard>
-      </View>
+            <TouchableOpacity style={styles.settingsButton}>
+                <Ionicons name="settings-outline" size={24} color={Theme.colors.textSecondary} />
+            </TouchableOpacity>
+        </View>
+
+        {/* Dashboard Components */}
+        <JourneyMap />
+        
+        <StepGoalCard 
+            currentSteps={currentSteps} 
+            goalSteps={goal} 
+        />
+
+        <MilestonePreview 
+            title="Succoth"
+            distanceAway="5 km"
+            description="The first stop on the journey out of Egypt. A place of temporary shelter."
+            imageUrl="https://images.unsplash.com/photo-1548588627-f978862b85e1?q=80&w=2600&auto=format&fit=crop&sat=-100" // Camp/Shelter, BW
+        />
+
+      </ScrollView>
     </View>
   );
 }
@@ -51,23 +55,41 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Theme.spacing.section,
-    backgroundColor: Theme.colors.background,
-    paddingHorizontal: Theme.spacing.l,
+    backgroundColor: Theme.colors.background, // Solid Black to match onboarding
+    // paddingTop: Theme.spacing.topScreen, // Safe Area
   },
-  content: {
-    paddingTop: Theme.spacing.xxl,
+  scrollContent: {
+      paddingBottom: 100, // Space for Tab Bar
   },
-  welcome: {
-    fontFamily: Theme.typography.fontFamily.bold,
-    fontSize: Theme.typography.sizes.title,
-    color: Theme.colors.textPrimary,
-    marginBottom: Theme.spacing.m,
+  header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: Theme.spacing.l,
+      paddingTop: 60, // Safe Area
+      marginBottom: Theme.spacing.m,
   },
-  meta: {
-    fontFamily: Theme.typography.fontFamily.medium,
-    fontSize: Theme.typography.sizes.body,
-    color: Theme.colors.textSecondary,
-    marginBottom: Theme.spacing.s,
+  journeyName: {
+      fontFamily: Theme.typography.fontFamily.bold,
+      fontSize: 34,
+      color: Theme.colors.textPrimary,
+      marginBottom: 4,
   },
+  streakContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+  },
+  streakText: {
+      fontFamily: Theme.typography.fontFamily.medium,
+      fontSize: 14,
+      color: Theme.colors.textSecondary,
+  },
+  settingsButton: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: Theme.colors.zinc800,
+      justifyContent: 'center',
+      alignItems: 'center',
+  }
 });

@@ -87,6 +87,9 @@ export const Theme = {
     l: 24,
     xl: 32,
     xxl: 40,
+    xxxl: 48,
+    xxxxl: 56,
+    topScreen: 60,
     section: 48,
   },
 

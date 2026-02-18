@@ -1,0 +1,162 @@
+import { Theme } from '@/constants/theme';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import Animated, {
+    useAnimatedProps,
+    useSharedValue,
+    withDelay,
+    withTiming
+} from 'react-native-reanimated';
+import Svg, { Circle } from 'react-native-svg';
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle) as any;
+
+interface StepGoalCardProps {
+    currentSteps: number;
+    goalSteps: number;
+}
+
+export function StepGoalCard({ currentSteps, goalSteps }: StepGoalCardProps) {
+    const progress = Math.min(currentSteps / goalSteps, 1);
+    const animatedProgress = useSharedValue(0);
+    const radius = 36;
+    const circumference = 2 * Math.PI * radius;
+
+    useEffect(() => {
+        animatedProgress.value = withDelay(500, withTiming(progress, { duration: 1500 }));
+    }, [progress]);
+
+    const animatedProps = useAnimatedProps(() => {
+        const strokeDashoffset = circumference * (1 - animatedProgress.value);
+        return {
+            strokeDashoffset,
+        };
+    });
+
+    return (
+        <View style={styles.cardContainer}>
+            <LinearGradient
+                colors={['#1c1c1e', '#111112']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.gradient}
+            >
+                <View style={styles.leftContent}>
+                    <Text style={styles.label}>TODAY'S STEPS</Text>
+                    <View style={styles.statsRow}>
+                        <Text style={styles.currentSteps}>{currentSteps.toLocaleString()}</Text>
+                        <Text style={styles.goalLabel}> / {goalSteps.toLocaleString()}</Text>
+                    </View>
+                    <Text style={styles.subtext}>
+                        {currentSteps >= goalSteps ? 'Goal reached! 🎉' : `${(goalSteps - currentSteps).toLocaleString()} steps to go`}
+                    </Text>
+                </View>
+
+                <View style={styles.ringContainer}>
+                     <Svg width={90} height={90} viewBox="0 0 90 90">
+                         {/* Background Circle */}
+                        <Circle
+                            cx="45"
+                            cy="45"
+                            r={radius}
+                            stroke={Theme.colors.zinc800}
+                            strokeWidth="8"
+                            fill="transparent"
+                            strokeOpacity={0.5}
+                        />
+                        {/* Progress Circle */}
+                        <AnimatedCircle
+                            cx="45"
+                            cy="45"
+                            r={radius}
+                            stroke={Theme.colors.primary}
+                            strokeWidth="8"
+                            fill="transparent"
+                            strokeDasharray={circumference}
+                            strokeLinecap="round"
+                            rotation="-90"
+                            origin="45, 45"
+                            animatedProps={animatedProps}
+                        />
+                     </Svg>
+                     <View style={styles.iconCenter}>
+                        <Ionicons name="footsteps" size={24} color={Theme.colors.primary} />
+                     </View>
+                </View>
+            </LinearGradient>
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    cardContainer: {
+        marginHorizontal: Theme.spacing.l,
+        marginBottom: Theme.spacing.l,
+        height: 120, // Increased height
+        borderRadius: Theme.borderRadius.xl,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.08)',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.3, // Stronger shadow
+        shadowRadius: 4.65,
+        elevation: 8,
+    },
+    gradient: {
+        flex: 1,
+        flexDirection: 'row', 
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: Theme.spacing.l,
+    },
+    leftContent: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    label: {
+        fontFamily: Theme.typography.fontFamily.medium,
+        fontSize: 11,
+        color: Theme.colors.accent,
+        marginBottom: 6,
+        letterSpacing: 1, // Uppercase spacing
+        textTransform: 'uppercase',
+    },
+    statsRow: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        marginBottom: 4,
+    },
+    currentSteps: {
+        fontFamily: Theme.typography.fontFamily.bold,
+        fontSize: 34, // Larger
+        color: Theme.colors.textPrimary,
+        letterSpacing: -1,
+    },
+    goalLabel: {
+        fontFamily: Theme.typography.fontFamily.medium,
+        fontSize: 18,
+        color: Theme.colors.zinc700,
+        marginLeft: 4,
+    },
+    subtext: {
+        fontFamily: Theme.typography.fontFamily.medium,
+        fontSize: 13,
+        color: Theme.colors.textSecondary,
+    },
+    ringContainer: {
+        position: 'relative',
+        width: 90,
+        height: 90,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    iconCenter: {
+        position: 'absolute',
+    }
+});
