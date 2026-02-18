@@ -4,17 +4,24 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const JOURNEYS = [
-  { id: 'exodus', title: 'Exodus: Egypt to Canaan', distance: '400 km', difficulty: 'Intermediate', image: 'https://images.unsplash.com/photo-1548588627-f978862b85e1?q=80&w=2600&auto=format&fit=crop&sat=-100' },
-  { id: 'emmaus', title: 'Road to Emmaus', distance: '11 km', difficulty: 'Beginner', image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2600&auto=format&fit=crop&sat=-100' },
-  { id: 'paul', title: 'Paul\'s First Journey', distance: '1,200 km', difficulty: 'Advanced', image: 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=2600&auto=format&fit=crop&sat=-100' },
-];
+import { ALL_JOURNEYS, getJourneysByDifficulty, Journey } from '@/constants/journeys';
+
+
+const CATEGORIES = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
 export default function DiscoverScreen() {
   const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  const filteredJourneys = selectedCategory === 'All' 
+    ? ALL_JOURNEYS 
+    : getJourneysByDifficulty(selectedCategory.toLowerCase() as Journey['difficulty']);
+
+  // Featured is always the first one marked as featured, or the first one in the list
+  const featuredJourney = ALL_JOURNEYS.find(j => j.isFeatured) || ALL_JOURNEYS[0];
 
   return (
     <View style={styles.container}>
@@ -29,9 +36,15 @@ export default function DiscoverScreen() {
 
         {/* Filter Chips */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chipsContainer}>
-            {['All', 'Saved', 'Completed', 'New'].map((chip, index) => (
-                <TouchableOpacity key={chip} style={[styles.chip, index === 0 && styles.chipActive]}>
-                    <Text style={[styles.chipText, index === 0 && styles.chipTextActive]}>{chip}</Text>
+            {CATEGORIES.map((chip, index) => (
+                <TouchableOpacity 
+                    key={chip} 
+                    style={[styles.chip, selectedCategory === chip && styles.chipActive]}
+                    onPress={() => setSelectedCategory(chip)}
+                >
+                    <Text style={[styles.chipText, selectedCategory === chip && styles.chipTextActive]}>
+                        {chip}
+                    </Text>
                 </TouchableOpacity>
             ))}
         </ScrollView>
@@ -39,27 +52,45 @@ export default function DiscoverScreen() {
         <Text style={styles.sectionTitle}>Featured Journey</Text>
         
         {/* Featured Card */}
-        <TouchableOpacity style={styles.featuredCard}>
-            <Image source={{ uri: JOURNEYS[0].image }} style={StyleSheet.absoluteFill} contentFit="cover" />
-            <LinearGradient colors={['transparent', 'rgba(0,0,0,0.9)']} style={StyleSheet.absoluteFill} />
-            <View style={styles.cardContent}>
-                <View style={styles.difficultyBadge}>
-                    <Text style={styles.difficultyText}>{JOURNEYS[0].difficulty}</Text>
+        {featuredJourney && (
+            <TouchableOpacity style={styles.featuredCard}>
+                <Image 
+                    source={{ uri: featuredJourney.featuredImageUrl }} 
+                    style={StyleSheet.absoluteFill} 
+                    contentFit="cover"
+                    transition={500}
+                />
+                <LinearGradient colors={['transparent', 'rgba(0,0,0,0.9)']} style={StyleSheet.absoluteFill} />
+                <View style={styles.cardContent}>
+                    <View style={styles.difficultyBadge}>
+                        <Text style={styles.difficultyText}>{featuredJourney.difficulty}</Text>
+                    </View>
+                    <Text style={styles.cardTitle}>{featuredJourney.name}</Text>
+                    <Text style={styles.cardMeta}>
+                        {(featuredJourney.totalDistance / 1000).toFixed(0)} km • {featuredJourney.estimatedDays} days
+                    </Text>
                 </View>
-                <Text style={styles.cardTitle}>{JOURNEYS[0].title}</Text>
-                <Text style={styles.cardMeta}>{JOURNEYS[0].distance} • 45 days avg</Text>
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+        )}
 
-        <Text style={[styles.sectionTitle, { marginTop: 32 }]}>All Journeys</Text>
+        <Text style={[styles.sectionTitle, { marginTop: 32 }]}>
+            {selectedCategory === 'All' ? 'All Journeys' : `${selectedCategory} Journeys`}
+        </Text>
         
         {/* List */}
-        {JOURNEYS.slice(1).map((journey) => (
+        {filteredJourneys.map((journey) => (
             <TouchableOpacity key={journey.id} style={styles.listItem}>
-                <Image source={{ uri: journey.image }} style={styles.listImage} />
+                <Image 
+                    source={{ uri: journey.thumbnailUrl }} 
+                    style={styles.listImage} 
+                    contentFit="cover"
+                    transition={300}
+                />
                 <View style={styles.listContent}>
-                    <Text style={styles.listTitle}>{journey.title}</Text>
-                    <Text style={styles.listMeta}>{journey.difficulty} • {journey.distance}</Text>
+                    <Text style={styles.listTitle}>{journey.name}</Text>
+                    <Text style={styles.listMeta}>
+                        {journey.difficulty} • {(journey.totalDistance / 1000).toFixed(0)} km
+                    </Text>
                 </View>
                 <Ionicons name="chevron-forward" size={20} color={Theme.colors.zinc700} />
             </TouchableOpacity>

@@ -46,8 +46,14 @@ export function StepGoalCard({ currentSteps, goalSteps }: StepGoalCardProps) {
                 <View style={styles.leftContent}>
                     <Text style={styles.label}>TODAY'S STEPS</Text>
                     <View style={styles.statsRow}>
-                        <Text style={styles.currentSteps}>{currentSteps.toLocaleString()}</Text>
-                        <Text style={styles.goalLabel}> / {goalSteps.toLocaleString()}</Text>
+                        <Text 
+                            numberOfLines={1} 
+                            adjustsFontSizeToFit
+                            minimumFontScale={0.4}
+                        >
+                            <Text style={styles.currentSteps}>{currentSteps.toLocaleString()}</Text>
+                            <Text style={styles.goalLabel}> / {goalSteps.toLocaleString()}</Text>
+                        </Text>
                     </View>
                     <Text style={styles.subtext}>
                         {currentSteps >= goalSteps ? 'Goal reached! 🎉' : `${(goalSteps - currentSteps).toLocaleString()} steps to go`}
@@ -94,7 +100,7 @@ const styles = StyleSheet.create({
     cardContainer: {
         marginHorizontal: Theme.spacing.l,
         marginBottom: Theme.spacing.l,
-        height: 120, // Increased height
+        height: 160, 
         borderRadius: Theme.borderRadius.xl,
         overflow: 'hidden',
         borderWidth: 1,
@@ -104,7 +110,7 @@ const styles = StyleSheet.create({
             width: 0,
             height: 4,
         },
-        shadowOpacity: 0.3, // Stronger shadow
+        shadowOpacity: 0.3,
         shadowRadius: 4.65,
         elevation: 8,
     },
@@ -113,36 +119,35 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: Theme.spacing.l,
+        paddingHorizontal: Theme.spacing.xl,
     },
     leftContent: {
         flex: 1,
         justifyContent: 'center',
+        paddingRight: Theme.spacing.m, // Add breathing room
     },
     label: {
-        fontFamily: Theme.typography.fontFamily.medium,
-        fontSize: 11,
+        fontFamily: Theme.typography.fontFamily.bold,
+        fontSize: 13,
         color: Theme.colors.accent,
-        marginBottom: 6,
-        letterSpacing: 1, // Uppercase spacing
+        marginBottom: 8,
+        letterSpacing: 1.5, 
         textTransform: 'uppercase',
     },
     statsRow: {
-        flexDirection: 'row',
-        alignItems: 'baseline',
-        marginBottom: 4,
+        marginBottom: 2, // No longer row flex, just a container
     },
     currentSteps: {
         fontFamily: Theme.typography.fontFamily.bold,
-        fontSize: 34, // Larger
+        fontSize: 56, 
         color: Theme.colors.textPrimary,
-        letterSpacing: -1,
+        letterSpacing: -2,
+        includeFontPadding: false,
     },
     goalLabel: {
         fontFamily: Theme.typography.fontFamily.medium,
-        fontSize: 18,
+        fontSize: 20,
         color: Theme.colors.zinc700,
-        marginLeft: 4,
     },
     subtext: {
         fontFamily: Theme.typography.fontFamily.medium,

@@ -1,19 +1,13 @@
 import { BadgeCard } from '@/components/profile/BadgeCard';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
 import { Theme } from '@/constants/theme';
+import { useJourneyStore } from '@/store/journeyStore';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-const STATS = [
-    { label: 'Total Steps', value: '124,532', icon: 'footsteps' },
-    { label: 'Avg. Daily', value: '6,230', icon: 'stats-chart' }, // Changed to stats-chart
-    { label: 'Longest Streak', value: '14 Days', icon: 'flame' },
-    { label: 'Journeys', value: '2', icon: 'map' },
-];
 
 const BADGES = [
     { id: '1', name: 'First Step', icon: 'checkmark-circle' as const, unlocked: true, date: 'Feb 12' },
@@ -24,6 +18,21 @@ const BADGES = [
 
 export default function ProfileScreen() {
     const router = useRouter();
+    
+    // Store Stats
+    const totalSteps = useJourneyStore(state => state.totalSteps);
+    const journeysCompleted = useJourneyStore(state => state.journeysCompleted);
+
+    // Derived Stats (Mocked or simple calc for now)
+    const avgDaily = Math.floor(totalSteps / 14); // Mock 14 days active
+    const longestStreak = 14; 
+
+    const STATS = [
+        { label: 'Total Steps', value: totalSteps.toLocaleString(), icon: 'footsteps' },
+        { label: 'Avg. Daily', value: avgDaily.toLocaleString(), icon: 'stats-chart' },
+        { label: 'Longest Streak', value: `${longestStreak} Days`, icon: 'flame' },
+        { label: 'Journeys', value: journeysCompleted.toString(), icon: 'map' },
+    ];
 
     return (
         <View style={styles.container}>
