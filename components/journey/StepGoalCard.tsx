@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         height: 160, 
         borderRadius: 24,
         overflow: 'hidden',
-        backgroundColor: Theme.colors.zinc900,
+        backgroundColor: Theme.colors.zinc700,
     },
     innerContainer: {
         flex: 1,

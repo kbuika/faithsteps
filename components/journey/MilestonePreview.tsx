@@ -30,7 +30,7 @@ export function MilestonePreview({ title, distanceAway, description, imageUrl }:
         />
         
         <LinearGradient 
-            colors={['transparent', 'rgba(28, 28, 30, 0.8)', '#1C1C1E']}
+            colors={['transparent', 'rgba(0,0,0,0.8)', 'rgba(0,0,0,0.95)']}
             style={StyleSheet.absoluteFill}
         />
 
