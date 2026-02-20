@@ -1,9 +1,9 @@
 import { Theme } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, {
+    FadeInDown,
     useAnimatedProps,
     useSharedValue,
     withDelay,
@@ -36,13 +36,11 @@ export function StepGoalCard({ currentSteps, goalSteps }: StepGoalCardProps) {
     });
 
     return (
-        <View style={styles.cardContainer}>
-            <LinearGradient
-                colors={['#1c1c1e', '#111112']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.gradient}
-            >
+        <Animated.View 
+            entering={FadeInDown.delay(200).duration(600)}
+            style={styles.cardContainer}
+        >
+            <View style={styles.innerContainer}>
                 <View style={styles.leftContent}>
                     <Text style={styles.label}>TODAY'S STEPS</Text>
                     <View style={styles.statsRow}>
@@ -68,9 +66,9 @@ export function StepGoalCard({ currentSteps, goalSteps }: StepGoalCardProps) {
                             cy="45"
                             r={radius}
                             stroke={Theme.colors.zinc800}
-                            strokeWidth="8"
+                            strokeWidth="12"
                             fill="transparent"
-                            strokeOpacity={0.5}
+                            strokeLinecap="round"
                         />
                         {/* Progress Circle */}
                         <AnimatedCircle
@@ -78,7 +76,7 @@ export function StepGoalCard({ currentSteps, goalSteps }: StepGoalCardProps) {
                             cy="45"
                             r={radius}
                             stroke={Theme.colors.primary}
-                            strokeWidth="8"
+                            strokeWidth="12"
                             fill="transparent"
                             strokeDasharray={circumference}
                             strokeLinecap="round"
@@ -91,8 +89,8 @@ export function StepGoalCard({ currentSteps, goalSteps }: StepGoalCardProps) {
                         <Ionicons name="footsteps" size={24} color={Theme.colors.primary} />
                      </View>
                 </View>
-            </LinearGradient>
-        </View>
+            </View>
+        </Animated.View>
     );
 }
 
@@ -101,20 +99,11 @@ const styles = StyleSheet.create({
         marginHorizontal: Theme.spacing.l,
         marginBottom: Theme.spacing.l,
         height: 160, 
-        borderRadius: Theme.borderRadius.xl,
+        borderRadius: 24,
         overflow: 'hidden',
-        borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.08)',
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 4.65,
-        elevation: 8,
+        backgroundColor: Theme.colors.zinc900,
     },
-    gradient: {
+    innerContainer: {
         flex: 1,
         flexDirection: 'row', 
         alignItems: 'center',
@@ -140,14 +129,14 @@ const styles = StyleSheet.create({
     currentSteps: {
         fontFamily: Theme.typography.fontFamily.bold,
         fontSize: 56, 
-        color: Theme.colors.textPrimary,
+        color: Theme.colors.primary,
         letterSpacing: -2,
         includeFontPadding: false,
     },
     goalLabel: {
         fontFamily: Theme.typography.fontFamily.medium,
-        fontSize: 20,
-        color: Theme.colors.zinc700,
+        fontSize: 18,
+        color: 'rgba(255,255,255,0.4)',
     },
     subtext: {
         fontFamily: Theme.typography.fontFamily.medium,

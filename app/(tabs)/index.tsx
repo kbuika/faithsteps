@@ -35,11 +35,6 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container}>
-            <ScreenHeader 
-                title={activeJourney.name}
-                subtitle={activeJourney.subtitle}
-            />
-
             <Animated.ScrollView 
                 onScroll={scrollHandler}
                 scrollEventThrottle={16}
@@ -71,6 +66,13 @@ export default function HomeScreen() {
                 {/* Padding for Tab Bar */}
                 <View style={{ height: 100 }} />
             </Animated.ScrollView>
+
+            <View style={styles.headerContainer}>
+                <ScreenHeader 
+                    title={activeJourney.name}
+                    subtitle={activeJourney.subtitle}
+                />
+            </View>
         </View>
     );
 }
@@ -80,7 +82,15 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Theme.colors.background,
     },
+    headerContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 10,
+    },
     content: {
+        paddingTop: 150, // Space for the floating absolute header
         paddingBottom: 100, // Space for Tab Bar
     },
 });

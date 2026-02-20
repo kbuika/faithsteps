@@ -1,5 +1,6 @@
 import { Theme } from '@/constants/theme';
-import { StyleSheet, Text, View } from 'react-native';
+import { BlurView } from 'expo-blur';
+import { StyleSheet, Text } from 'react-native';
 
 interface ScreenHeaderProps {
   title: string;
@@ -8,17 +9,17 @@ interface ScreenHeaderProps {
 
 export function ScreenHeader({ title, subtitle }: ScreenHeaderProps) {
   return (
-    <View style={styles.container}>
+    <BlurView intensity={30} tint="dark" style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
-    </View>
+    </BlurView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: Theme.spacing.l,
-    paddingTop: 60, // Safe area approximation if not using SafeAreaView
+    paddingTop: 65, // Safe area approximation if not using SafeAreaView
     paddingBottom: Theme.spacing.m,
   },
   title: {

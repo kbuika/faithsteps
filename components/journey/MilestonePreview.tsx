@@ -4,6 +4,7 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 interface MilestonePreviewProps {
     title: string;
@@ -14,7 +15,10 @@ interface MilestonePreviewProps {
 
 export function MilestonePreview({ title, distanceAway, description, imageUrl }: MilestonePreviewProps) {
   return (
-    <View style={styles.container}>
+    <Animated.View 
+        entering={FadeInDown.delay(400).duration(600)}
+        style={styles.container}
+    >
       <Text style={styles.header}>Next Milestone</Text>
       
       <View style={styles.card}>
@@ -26,7 +30,7 @@ export function MilestonePreview({ title, distanceAway, description, imageUrl }:
         />
         
         <LinearGradient 
-            colors={['transparent', 'rgba(0,0,0,0.8)', 'rgba(0,0,0,0.95)']}
+            colors={['transparent', 'rgba(28, 28, 30, 0.8)', '#1C1C1E']}
             style={StyleSheet.absoluteFill}
         />
 
@@ -47,7 +51,7 @@ export function MilestonePreview({ title, distanceAway, description, imageUrl }:
             />
         </View>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -58,7 +62,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: Theme.typography.fontFamily.bold,
-    fontSize: 18,
+    fontSize: 20,
     color: Theme.colors.textPrimary,
     marginBottom: Theme.spacing.m,
   },

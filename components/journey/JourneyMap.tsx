@@ -1,5 +1,6 @@
 import { Milestone } from '@/constants/journeys';
 import { Theme } from '@/constants/theme';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -39,9 +40,9 @@ export function JourneyMap({ milestones, completedMilestoneIds }: JourneyMapProp
                                     isCurrent && styles.circleCurrent,
                                     isLocked && styles.circleLocked
                                 ]}>
-                                    {isCompleted && <Text style={styles.checkIcon}>✓</Text>}
+                                    {isCompleted && <Ionicons name="checkmark" size={24} color={Theme.colors.primary} />}
                                     {isCurrent && <View style={styles.pulseDot} />}
-                                    {isLocked && <Text style={styles.lockIcon}>🔒</Text>}
+                                    {isLocked && <Ionicons name="lock-closed" size={20} color={Theme.colors.zinc700} />}
                                 </View>
                                 
                                 <Text 
@@ -98,74 +99,70 @@ const styles = StyleSheet.create({
         zIndex: 2,
     },
     nodeCircle: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
+        width: 56,
+        height: 56,
+        borderRadius: 28,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Theme.colors.zinc800,
+        backgroundColor: Theme.colors.zinc900,
         borderWidth: 2,
-        borderColor: Theme.colors.zinc700,
-        marginBottom: 8,
+        borderColor: Theme.colors.zinc800,
+        marginBottom: 12,
         zIndex: 2,
     },
     circleCompleted: {
-        backgroundColor: Theme.colors.primary,
+        backgroundColor: 'rgba(23, 185, 120, 0.1)',
         borderColor: Theme.colors.primary,
     },
     circleCurrent: {
         borderColor: Theme.colors.primary,
-        backgroundColor: 'rgba(23, 185, 120, 0.1)',
+        backgroundColor: 'rgba(23, 185, 120, 0.05)',
+        ...Theme.shadows.glow,
     },
     circleLocked: {
-        opacity: 0.5,
-    },
-    checkIcon: {
-        color: '#000',
-        fontWeight: 'bold',
-    },
-    lockIcon: {
-        fontSize: 12,
+        backgroundColor: Theme.colors.zinc900,
+        borderColor: Theme.colors.zinc800,
     },
     pulseDot: {
-        width: 12,
-        height: 12,
-        borderRadius: 6,
+        width: 14,
+        height: 14,
+        borderRadius: 7,
         backgroundColor: Theme.colors.primary,
+        ...Theme.shadows.glow,
     },
     nodeCurrent: {
         transform: [{ scale: 1.05 }],
     },
     connector: {
-        width: 50,
-        height: 3, 
-        marginTop: 22.5, 
+        width: 45,
+        height: 2, 
+        marginTop: 27, 
         backgroundColor: Theme.colors.zinc700,
         zIndex: 1,
-        marginLeft: -20, // Tighter overlap
-        marginRight: -20, // Tighter overlap
+        marginLeft: -10, // Tighter overlap
+        marginRight: -10, // Tighter overlap
     },
     connectorActive: {
         backgroundColor: Theme.colors.primary,
     },
     connectorInactive: {
-        backgroundColor: Theme.colors.zinc800,
+        backgroundColor: Theme.colors.zinc700,
     },
     nodeTitle: {
         fontFamily: Theme.typography.fontFamily.medium,
-        fontSize: 12,
+        fontSize: 13,
         color: Theme.colors.textSecondary,
         textAlign: 'center',
-        height: 32,
+        height: 20,
     },
     textCurrent: {
         color: Theme.colors.primary,
         fontWeight: 'bold',
     },
     nodeDistance: {
-        fontFamily: Theme.typography.fontFamily.regular,
-        fontSize: 10,
+        fontFamily: Theme.typography.fontFamily.medium,
+        fontSize: 11,
         color: Theme.colors.textTertiary,
-        marginTop: 2,
+        marginTop: 4,
     },
 });
